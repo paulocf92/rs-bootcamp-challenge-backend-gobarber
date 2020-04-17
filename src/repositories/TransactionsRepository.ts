@@ -12,6 +12,11 @@ interface Balance {
 class TransactionsRepository extends Repository<Transaction> {
   public async getBalance(): Promise<Balance> {
     // TODO
+    return {
+      income: 0,
+      outcome: 0,
+      total: 0,
+    };
   }
 }
 
