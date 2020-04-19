@@ -28,7 +28,7 @@ class CreateTransactionService {
       throw new AppError('Invalid operation!');
     }
 
-    if (type === 'outcome' && total - value < 0) {
+    if (type === 'outcome' && total < value) {
       throw new AppError('Insufficient funds for withdrawal!');
     }
 
@@ -49,7 +49,7 @@ class CreateTransactionService {
       title,
       value,
       type,
-      category_id: findCategory.id,
+      category: findCategory,
     });
 
     await transactionsRepository.save(transaction);

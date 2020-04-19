@@ -31,22 +31,31 @@ class TransactionsRepository extends Repository<Transaction> {
 
   public async getBalance(): Promise<Balance> {
     const transactions = await this.find();
-    const income = transactions.reduce((total, transaction) => {
-      const { type, value } = transaction;
-      return type === 'income' ? total + value : total;
-    }, 0);
-    const outcome = transactions.reduce((total, transaction) => {
-      const { type, value } = transaction;
-      return type === 'outcome' ? total + value : total;
-    }, 0);
 
-    const balance = {
-      income,
-      outcome,
-      total: income - outcome,
-    };
+    const { income, outcome } = transactions.reduce(
+      (acc, transaction) => {
+        switch (transaction.type) {
+          case 'income':
+            acc.income += Number(transaction.value);
+            break;
+          case 'outcome':
+            acc.outcome += Number(transaction.value);
+            break;
+          default:
+            break;
+        }
 
-    return balance;
+        return acc;
+      },
+      {
+        income: 0,
+        outcome: 0,
+      },
+    );
+
+    const total = income - outcome;
+
+    return { income, outcome, total };
   }
 }
 
