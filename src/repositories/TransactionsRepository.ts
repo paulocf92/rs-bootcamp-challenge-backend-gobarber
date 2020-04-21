@@ -16,10 +16,7 @@ interface Results {
 @EntityRepository(Transaction)
 class TransactionsRepository extends Repository<Transaction> {
   public async all(): Promise<Results> {
-    const transactions = await this.find({
-      relations: ['category'],
-      select: ['id', 'title', 'value', 'type'],
-    });
+    const transactions = await this.find();
 
     const balance = await this.getBalance();
 
